@@ -30,10 +30,6 @@ The dashboard shows total leads, new leads today, high-priority uncontacted lead
 optic/
 ├── optic-api/          Laravel 11 backend (REST API)
 ├── optic-web/          Next.js 15 frontend
-├── references/         Project documentation and planning
-│   ├── SETUP.md        Full setup instructions
-│   ├── AI_USAGE.md     AI tools usage documentation
-│   └── CLAUDE.md       Claude Code session context file
 └── README.md
 ```
 
@@ -76,7 +72,7 @@ optic/
 
 ## Quick Start
 
-Full setup instructions with all commands, environment variables, and Docker setup for PostgreSQL and Redis are in [references/SETUP.md](references/SETUP.md).
+Full setup instructions with all commands, environment variables, and Docker setup for PostgreSQL and Redis are in the [Setup Guide](https://gist.github.com/devraj-thakor/ecc657cb677cdcce883c097f3a692366).
 
 Short version:
 
@@ -106,8 +102,7 @@ npm run dev
 
 ## Documentation
 
-- [Setup Guide](references/SETUP.md) - full installation, Docker, environment variables, AI provider configuration
-- [AI Usage Documentation](references/AI_USAGE.md) - how AI tools were used throughout development, challenges faced, and what was built manually
+- [Setup Guide](https://gist.github.com/devraj-thakor/ecc657cb677cdcce883c097f3a692366) - full installation, Docker, environment variables, AI provider configuration
 
 ---
 
