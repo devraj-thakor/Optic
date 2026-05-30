@@ -1,0 +1,35 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: optic_postgres
+    restart: always
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_DB: optic
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: secretpassword
+    volumes:
+      - optic_pgdata:/var/lib/postgresql/data
+
+  redis:
+    image: redis:7-alpine
+    container_name: optic_redis
+    restart: always
+    ports:
+      - "6379:6379"
+
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: optic_pgadmin
+    restart: always
+    ports:
+      - "5050:80"
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@optic.com
+      PGADMIN_DEFAULT_PASSWORD: adminpassword
+
+volumes:
+  optic_pgdata:
