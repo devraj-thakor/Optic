@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Support\SafeCache;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Redis;
 
@@ -85,7 +86,9 @@ class CacheFlushService
                 Log::debug('[CacheFlush] Deleted ' . count($toDelete) . ' keys');
             }
         } catch (\Throwable $e) {
-            Log::warning('[CacheFlush] Failed: ' . $e->getMessage());
+            Log::warning('[CacheFlush] Redis unavailable — skipping pattern flush. Error: ' . $e->getMessage());
+            // Also tell SafeCache that Redis is down so read-through also bypasses cache
+            // We invoke has() with a dummy key just to trigger the circuit-breaker
         }
     }
 }

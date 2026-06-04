@@ -15,6 +15,7 @@ interface UIState {
   // Sidebar state
   isSidebarCollapsed: boolean;
   toggleSidebar: () => void;
+  setSidebarCollapsed: (collapsed: boolean) => void;
 
   // Command palette
   isCommandPaletteOpen: boolean;
@@ -35,6 +36,7 @@ export const useUIStore = create<UIState>()(
       isSidebarCollapsed: false,
       toggleSidebar: () =>
         set((state) => ({ isSidebarCollapsed: !state.isSidebarCollapsed })),
+      setSidebarCollapsed: (collapsed) => set({ isSidebarCollapsed: collapsed }),
 
       isCommandPaletteOpen: false,
       openCommandPalette: () => set({ isCommandPaletteOpen: true }),

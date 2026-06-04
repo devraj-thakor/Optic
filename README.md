@@ -1,3 +1,11 @@
+---
+title: Optic API
+emoji: 🚀
+colorFrom: blue
+colorTo: indigo
+sdk: docker
+pinned: false
+---
 # Optic
 
 **Every inquiry, instantly understood.**

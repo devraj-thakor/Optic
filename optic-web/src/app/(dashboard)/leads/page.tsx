@@ -149,7 +149,7 @@ export default function LeadsPage() {
                   {formatRelativeTime(lead.created_at)}
                 </div>
 
-                <div className="opacity-0 group-hover:opacity-100 transition-opacity">
+                <div className="opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-opacity">
                   <Link
                     href={`/leads/${lead.id}`}
                     prefetch={true}

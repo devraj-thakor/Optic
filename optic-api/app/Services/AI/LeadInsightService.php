@@ -7,7 +7,7 @@ use App\Exceptions\AIProcessingException;
 use App\Models\Lead;
 use App\Models\LeadInsight;
 use App\Services\CacheFlushService;
-use Illuminate\Support\Facades\Cache;
+use App\Support\SafeCache;
 use Illuminate\Support\Facades\Log;
 use Throwable;
 
@@ -21,8 +21,8 @@ class LeadInsightService
     {
         $cacheKey = "ai_insight:{$lead->id}:" . md5($lead->inquiry_message);
 
-        if (!$force && Cache::has($cacheKey)) {
-            return $lead->insight ?? $this->createInsightFromCache($lead, Cache::get($cacheKey));
+        if (!$force && SafeCache::has($cacheKey)) {
+            return $lead->insight ?? $this->createInsightFromCache($lead, SafeCache::get($cacheKey));
         }
 
         $startTime = microtime(true);
@@ -33,7 +33,7 @@ class LeadInsightService
             try {
                 $primaryProvider = $this->factory::makePrimary();
                 $rawResponse = $primaryProvider->analyze(
-                    source:  $lead->source->value,
+                    source: $lead->source->value,
                     message: $lead->inquiry_message,
                 );
 
@@ -44,24 +44,23 @@ class LeadInsightService
 
                 $processingMs = (int) ((microtime(true) - $startTime) * 1000);
                 $responseData = AIResponseData::fromArray(
-                    data:             $rawResponse,
-                    model:            $primaryProvider->getModelName(),
-                    provider:         $primaryProvider->getProviderName(),
+                    data: $rawResponse,
+                    model: $primaryProvider->getModelName(),
+                    provider: $primaryProvider->getProviderName(),
                     processingTimeMs: $processingMs,
                 );
 
-                Cache::put($cacheKey, $responseData, now()->addHour());
+                SafeCache::put($cacheKey, $responseData, now()->addHour());
                 return $this->saveInsight($lead, $responseData);
-
             } catch (Throwable $primaryError) {
-                Log::warning('AI primary (Gemini) failed — switching to fallback', [
+                Log::warning('AI primary (Gemini) failed - switching to fallback', [
                     'lead_id' => $lead->id,
                     'error'   => $primaryError->getMessage(),
                 ]);
                 // Fall through to the fallback below
             }
         } else {
-            Log::debug('GEMINI_API_KEY not set — skipping primary, using fallback directly');
+            Log::debug('GEMINI_API_KEY not set - skipping primary, using fallback directly');
         }
 
         // ── Step 2: fallback provider (env AI_PROVIDER) ───────────────────────
@@ -74,19 +73,19 @@ class LeadInsightService
         ]);
 
         $rawResponse = $fallbackProvider->analyze(
-            source:  $lead->source->value,
+            source: $lead->source->value,
             message: $lead->inquiry_message,
         );
 
         $processingMs = (int) ((microtime(true) - $startTime) * 1000);
         $responseData = AIResponseData::fromArray(
-            data:             $rawResponse,
-            model:            $fallbackProvider->getModelName(),
-            provider:         $fallbackProvider->getProviderName(),
+            data: $rawResponse,
+            model: $fallbackProvider->getModelName(),
+            provider: $fallbackProvider->getProviderName(),
             processingTimeMs: $processingMs,
         );
 
-        Cache::put($cacheKey, $responseData, now()->addHour());
+        SafeCache::put($cacheKey, $responseData, now()->addHour());
         return $this->saveInsight($lead, $responseData);
     }
 

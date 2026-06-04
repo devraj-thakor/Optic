@@ -6,9 +6,35 @@ interface AuthState {
   token: string | null;
   user: AuthUser | null;
   isAuthenticated: boolean;
+  _hasHydrated: boolean;          // true once Zustand has read from the cookie
+  setHasHydrated: (v: boolean) => void;
   setAuth: (token: string, user: AuthUser) => void;
   logout: () => void;
 }
+
+// Cookie helpers — synchronous, work in middleware and client components
+const COOKIE_NAME = "optic-auth";
+const COOKIE_MAX_AGE = 60 * 60 * 24 * 7; // 7 days
+
+const cookieStorage = {
+  getItem: (key: string): string | null => {
+    if (typeof document === "undefined") return null;
+    const match = document.cookie
+      .split("; ")
+      .find((c) => c.startsWith(`${key}=`));
+    return match ? decodeURIComponent(match.split("=")[1]) : null;
+  },
+
+  setItem: (key: string, value: string): void => {
+    if (typeof document === "undefined") return;
+    document.cookie = `${key}=${encodeURIComponent(value)};path=/;max-age=${COOKIE_MAX_AGE};SameSite=Lax`;
+  },
+
+  removeItem: (key: string): void => {
+    if (typeof document === "undefined") return;
+    document.cookie = `${key}=;path=/;max-age=0;expires=Thu, 01 Jan 1970 00:00:00 GMT;SameSite=Lax`;
+  },
+};
 
 export const useAuthStore = create<AuthState>()(
   persist(
@@ -16,6 +42,9 @@ export const useAuthStore = create<AuthState>()(
       token: null,
       user: null,
       isAuthenticated: false,
+      _hasHydrated: false,
+
+      setHasHydrated: (v) => set({ _hasHydrated: v }),
 
       setAuth: (token, user) => {
         set({ token, user, isAuthenticated: true });
@@ -26,24 +55,14 @@ export const useAuthStore = create<AuthState>()(
       },
     }),
     {
-      name: "optic-auth",
-      // Use cookies via document.cookie so middleware can read it
-      storage: createJSONStorage(() => ({
-        getItem: (key: string) => {
-          if (typeof window === "undefined") return null;
-          const cookies = document.cookie.split("; ");
-          const cookie = cookies.find((c) => c.startsWith(`${key}=`));
-          return cookie ? decodeURIComponent(cookie.split("=")[1]) : null;
-        },
-        setItem: (key: string, value: string) => {
-          if (typeof window === "undefined") return;
-          document.cookie = `${key}=${encodeURIComponent(value)};path=/;max-age=${60 * 60 * 24 * 7}`;
-        },
-        removeItem: (key: string) => {
-          if (typeof window === "undefined") return;
-          document.cookie = `${key}=;path=/;max-age=0`;
-        },
-      })),
+      name: COOKIE_NAME,
+      storage: createJSONStorage(() => cookieStorage),
+
+      // Called once Zustand has finished reading state from the cookie.
+      // Until this fires, _hasHydrated is false and auth guards must not act.
+      onRehydrateStorage: () => (state) => {
+        state?.setHasHydrated(true);
+      },
     }
   )
 );

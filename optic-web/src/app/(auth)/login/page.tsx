@@ -1,14 +1,12 @@
 "use client";
 
-import { useEffect, useState, Suspense, useRef, useCallback } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useState, Suspense, useRef, useCallback, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { motion } from "framer-motion";
 import { Eye, EyeOff, ArrowRight } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
-import { useAuthStore } from "@/store/authStore";
 
 // --- CONFIGURATION HUB ---
 const LAYOUT_CONFIG = {
@@ -37,17 +35,12 @@ function OpticLogoIcon() {
 }
 
 function LoginForm() {
-  const router = useRouter();
-  const searchParams = useSearchParams();
   const { login, isLoggingIn } = useAuth();
-  const { isAuthenticated } = useAuthStore();
   const [showPassword, setShowPassword] = useState(false);
 
   const containerRef = useRef<HTMLDivElement>(null);
   const contentRef = useRef<HTMLDivElement>(null);
   const [dynamicScale, setDynamicScale] = useState(1);
-
-  const from = searchParams.get("from") || "/dashboard";
 
   const {
     register,
@@ -107,23 +100,9 @@ function LoginForm() {
     updateScale();
   }, [updateScale, errors]);
 
-  useEffect(() => {
-    if (isAuthenticated) {
-      router.push(from);
-    }
-  }, [isAuthenticated, router, from]);
-
-  const onSubmit = async (data: LoginFormData) => {
-    try {
-      await new Promise<void>((resolve, reject) => {
-        login(data, {
-          onSuccess: () => { router.push(from); resolve(); },
-          onError: () => reject(),
-        });
-      });
-    } catch {
-      // Error handled in hook
-    }
+  const onSubmit = (data: LoginFormData) => {
+    // useAuth handles all redirect logic (soft nav + hard fallback)
+    login(data);
   };
 
   const fillDemo = () => {

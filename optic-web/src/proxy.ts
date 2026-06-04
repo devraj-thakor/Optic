@@ -39,6 +39,13 @@ export default function proxy(request: NextRequest) {
 
 export const config = {
   matcher: [
-    "/((?!_next/static|_next/image|favicon.ico|public).*)",
+    /*
+     * Match all routes EXCEPT:
+     * - _next/static  (Next.js static assets)
+     * - _next/image   (Next.js image optimization)
+     * - Static files: .ico, .svg, .png, .jpg, .jpeg, .webp, .xml, .txt
+     * Without this, /favicon.svg and /icon.svg get redirected to /login.
+     */
+    "/((?!_next/static|_next/image|.*\\.(?:ico|svg|png|jpg|jpeg|webp|xml|txt)$).*)",
   ],
 };

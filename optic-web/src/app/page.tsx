@@ -4,7 +4,7 @@ import { ChannelIcon, CHANNEL_COLORS } from "@/components/ui/ChannelIcon";
 import { ChannelCard } from "@/components/landing/ChannelCard";
 
 export const metadata: Metadata = {
-  title: "Optic — AI Lead Intelligence Platform",
+  title: "Optic - AI Lead Intelligence Platform",
   description:
     "Every inquiry, instantly understood. AI-native lead management for founders who move fast.",
   icons: { icon: "/favicon.svg" },
@@ -32,7 +32,7 @@ const channels = [
 const features = [
   {
     title: "All your channels unified",
-    desc: "Website, WhatsApp, Instagram, Facebook, LinkedIn, and referrals — all in one intelligent dashboard.",
+    desc: "Website, WhatsApp, Instagram, Facebook, LinkedIn, and referrals - all in one intelligent dashboard.",
     icon: () => (
       <svg width="22" height="22" viewBox="0 0 22 22" fill="none">
         <circle cx="11" cy="11" r="9.5" stroke="#4B6EF5" strokeWidth="1.5" />
@@ -44,7 +44,7 @@ const features = [
   },
   {
     title: "AI that thinks before you do",
-    desc: "Every new lead is instantly analyzed. Urgency, intent, score, and recommended action — in seconds.",
+    desc: "Every new lead is instantly analyzed. Urgency, intent, score, and recommended action - in seconds.",
     icon: () => (
       <svg width="22" height="22" viewBox="0 0 22 22" fill="none">
         <path d="M11 3C7.13 3 4 6.13 4 10C4 12.38 5.19 14.47 7 15.74V18H15V15.74C16.81 14.47 18 12.38 18 10C18 6.13 14.87 3 11 3Z" stroke="#4B6EF5" strokeWidth="1.5" strokeLinejoin="round" />
@@ -71,7 +71,6 @@ const features = [
 export default function LandingPage() {
   return (
     <div className="min-h-screen" style={{ background: "#06070B" }}>
-      {/* Background gradient — CyberX style */}
       <div
         className="fixed inset-0 pointer-events-none"
         style={{
@@ -116,14 +115,14 @@ export default function LandingPage() {
         <div className="flex items-center gap-3">
           <Link
             href="/login"
-            className="px-4 py-2 rounded-lg text-sm font-medium transition-all"
+            className="hidden sm:block px-4 py-2 rounded-lg text-sm font-medium transition-all"
             style={{ color: "#94A3B8" }}
           >
             Sign in
           </Link>
           <Link
             href="/dashboard"
-            className="flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-semibold transition-all"
+            className="flex items-center justify-center gap-2 px-4 py-2 rounded-lg text-sm font-semibold transition-all"
             style={{
               background: "linear-gradient(180deg, #5C7CFA 0%, #4B6EF5 100%)",
               color: "#FFFFFF",
@@ -180,10 +179,10 @@ export default function LandingPage() {
             Built for founders receiving leads from 5 different channels and mentally juggling which ones matter.
           </p>
 
-          <div className="flex items-center gap-3">
+          <div className="flex flex-col sm:flex-row items-center gap-3 w-full sm:w-auto">
             <Link
               href="/dashboard"
-              className="flex items-center gap-2 px-8 py-3.5 rounded-xl font-semibold text-sm transition-all"
+              className="w-full sm:w-auto flex items-center justify-center gap-2 px-8 py-3.5 rounded-xl font-semibold text-sm transition-all"
               style={{
                 background: "linear-gradient(180deg, #5C7CFA 0%, #4B6EF5 100%)",
                 color: "#FFFFFF",
@@ -195,7 +194,7 @@ export default function LandingPage() {
             </Link>
             <Link
               href="/login"
-              className="px-8 py-3.5 rounded-xl font-semibold text-sm transition-all"
+              className="w-full sm:w-auto flex items-center justify-center px-8 py-3.5 rounded-xl font-semibold text-sm transition-all"
               style={{
                 background: "rgba(255,255,255,0.04)",
                 color: "#9198A8",
@@ -215,7 +214,7 @@ export default function LandingPage() {
           >
             All 6 channels, one dashboard
           </p>
-          <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
             {channels.map((ch) => {
               const color = CHANNEL_COLORS[ch.key] ?? "#4B6EF5";
               return (
@@ -286,7 +285,7 @@ export default function LandingPage() {
               >
                 <p className="text-xs uppercase tracking-wide mb-2" style={{ color: "#8B95A5" }}>Recommended Action</p>
                 <p className="text-sm" style={{ color: "#34D399" }}>
-                  Schedule a discovery call within 24 hours — Series A timeline creates genuine urgency.
+                  Schedule a discovery call within 24 hours - Series A timeline creates genuine urgency.
                 </p>
               </div>
               <div className="flex items-center justify-between text-xs" style={{ color: "#8B95A5" }}>

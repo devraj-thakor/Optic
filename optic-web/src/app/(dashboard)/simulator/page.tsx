@@ -157,7 +157,7 @@ export default function SimulatorPage() {
             <p className="text-xs leading-relaxed" style={{ color: "#7B97FF" }}>
               <strong>How it works:</strong> A lead is created and an AI job is dispatched to the queue.
               The pulsing <span style={{ color: "#4B6EF5" }}>AI</span> badge means the score is being
-              calculated — it updates on the next poll.
+              calculated - it updates on the next poll.
             </p>
           </div>
         </div>

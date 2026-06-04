@@ -82,10 +82,23 @@ return [
         ],
 
         'failover' => [
-            'driver' => 'failover',
+            'driver'      => 'failover',
             'connections' => [
+                'redis',
                 'database',
-                'deferred',
+            ],
+        ],
+
+        /*
+         * Alias used as the actual QUEUE_CONNECTION in production.
+         * Tries Redis (Upstash) first; if Redis throws any connection/limit error
+         * it automatically falls over to the database jobs table.
+         */
+        'redis-db-failover' => [
+            'driver'      => 'failover',
+            'connections' => [
+                'redis',
+                'database',
             ],
         ],
 

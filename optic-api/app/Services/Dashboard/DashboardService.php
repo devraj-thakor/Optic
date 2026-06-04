@@ -7,13 +7,13 @@ use App\Enums\LeadPriority;
 use App\Enums\LeadSource;
 use App\Enums\LeadStatus;
 use App\Models\Lead;
-use Illuminate\Support\Facades\Cache;
+use App\Support\SafeCache;
 
 class DashboardService
 {
     public function getStats(): DashboardStatsData
     {
-        return Cache::remember('dashboard:stats:global', 300, function () {
+        return SafeCache::remember('dashboard:stats:global', 300, function () {
             $totalLeads = Lead::count();
 
             $newLeadsToday = Lead::whereDate('created_at', today())->count();
@@ -50,7 +50,7 @@ class DashboardService
 
     public function getRecentLeads(int $limit = 10)
     {
-        return Cache::remember('dashboard:recent', 60, function () use ($limit) {
+        return SafeCache::remember('dashboard:recent', 60, function () use ($limit) {
             return Lead::with('insight')
                 ->latest()
                 ->limit($limit)

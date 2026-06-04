@@ -4,7 +4,7 @@ namespace App\Repositories;
 
 use App\Models\Lead;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
-use Illuminate\Support\Facades\Cache;
+use App\Support\SafeCache;
 
 class LeadRepository
 {
@@ -54,21 +54,21 @@ class LeadRepository
             return $build();
         }
 
-        return Cache::remember($cacheKey, 30, $build);
+        return SafeCache::remember($cacheKey, 30, $build);
     }
 
     public function findByUuid(string $uuid): ?Lead
     {
-        return Cache::remember("lead:{$uuid}", 60, function () use ($uuid) {
+        return SafeCache::remember("lead:{$uuid}", 60, function () use ($uuid) {
             return Lead::with(['insight', 'statusHistory'])->find($uuid);
         });
     }
 
     public function invalidateLeadCache(string $uuid): void
     {
-        Cache::forget("lead:{$uuid}");
+        SafeCache::forget("lead:{$uuid}");
         // Invalidate list caches (pattern-based not natively supported; clear entire prefix)
         // In production, use cache tags or Redis SCAN
-        Cache::forget('leads:list:' . md5(''));
+        SafeCache::forget('leads:list:' . md5(''));
     }
 }

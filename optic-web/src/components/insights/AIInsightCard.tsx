@@ -8,8 +8,8 @@ import { useRegenerateInsights } from "@/hooks/useLeads";
 import { LeadScoreCircle } from "@/components/leads/LeadBadges";
 
 interface AIInsightCardProps {
-  lead:       Lead;
-  insight:    LeadInsight | null;
+  lead: Lead;
+  insight: LeadInsight | null;
   isLoading?: boolean;
 }
 
@@ -52,7 +52,7 @@ function InsightField({
 }: {
   label: string;
   value: string | null;
-  icon:  React.ElementType;
+  icon: React.ElementType;
   color: string;
 }) {
   return (
@@ -67,7 +67,7 @@ function InsightField({
         </span>
       </div>
       <p className="text-sm leading-relaxed" style={{ color: "#F1F5F9" }}>
-        {value || "—"}
+        {value || "-"}
       </p>
     </div>
   );
@@ -106,8 +106,8 @@ export default function AIInsightCard({ lead, insight, isLoading }: AIInsightCar
           className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium transition-all"
           style={{
             background: "rgba(255,255,255,0.04)",
-            color:      "#4D5568",
-            border:     "1px solid rgba(255,255,255,0.07)",
+            color: "#4D5568",
+            border: "1px solid rgba(255,255,255,0.07)",
           }}
         >
           <RefreshCw size={12} className={regenerate.isPending ? "animate-spin" : ""} />
